@@ -1,22 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Carousel, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function Room({ room, fromdate, todate ,numberOfPeople}) {
   const [show, setShow] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    // Convert base64 encoded image data to data URLs
+    const urls = [
+      room.imagefile1,
+      room.imagefile2,
+      room.imagefile3
+    ].map(imageData => {
+      if (imageData) {
+        return `data:${imageData.contentType};base64,${imageData.data}`;
+      } else {
+        return null;
+      }
+    });
+    setImageUrls(urls);
+  
+    // Log the generated image URLs
+    console.log("Generated Image URLs:", urls);
+  
+  }, [room.imagefile1, room.imagefile2, room.imagefile3]);
+  
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // Check if the room count is greater than 0
-  if (room.count <= 0 || room.display <=0) {
-    return null; // Do not render the component if count is 0 or negative
-  }
+  const renderImages = () => {
+    return imageUrls.map((imageUrl, index) => (
+      <Carousel.Item key={index}>
+        {imageUrl && (
+          <img
+            className="d-block w-100 bigimg"
+            src={imageUrl}
+            alt={`Room Image ${index + 1}`}
+          />
+        )}
+      </Carousel.Item>
+    ));
+  };
 
   return (
     <div className='row bs'>
       <div className="col-md-4">
-        <img src={room.imageurls[0]} className='smallimg' alt="Room Preview" />
+        {imageUrls[0] && (
+          <img
+            src={imageUrls[0]}
+            className='smallimg'
+            alt="Room Preview"
+            onClick={() => setSelectedImageIndex(0)}
+          />
+        )}
       </div>
       <div className="col-md-7 text-left">
         <h1>{room.name}</h1>
@@ -26,7 +65,7 @@ function Room({ room, fromdate, todate ,numberOfPeople}) {
           <p>Type: {room.type}</p>
         </b>
         <div style={{ float: 'right' }}>
-          {(fromdate && todate) && (
+        {(fromdate && todate) && (
             <Link to={`/book/${room._id}/${fromdate}/${todate}/${numberOfPeople}`}>
               <Button className='btn btn-primary m-2'>Book Now</Button>
             </Link>
@@ -40,16 +79,13 @@ function Room({ room, fromdate, todate ,numberOfPeople}) {
           <Modal.Title>{room.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Carousel prevLabel='' nextLabel=''>
-            {room.imageurls.map((url, index) => (
-              <Carousel.Item key={index}>
-                <img
-                  className="d-block w-100 bigimg"
-                  src={url}
-                  alt={`Room Image ${index + 1}`}
-                />
-              </Carousel.Item>
-            ))}
+          <Carousel
+            prevLabel=''
+            nextLabel=''
+            activeIndex={selectedImageIndex}
+            onSelect={(index) => setSelectedImageIndex(index)}
+          >
+            {renderImages()}
           </Carousel>
           <p>{room.description}</p>
         </Modal.Body>

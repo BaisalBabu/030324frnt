@@ -488,6 +488,7 @@ export function Bookings() {
                           <th>Room</th>
                           <th>From</th>
                           <th>To</th>
+                          <th>Guest count</th>
                           <th>Status</th>
                       </tr>
                   </thead>
@@ -499,6 +500,7 @@ export function Bookings() {
                               <td>{bookings.room}</td>
                               <td>{bookings.fromdate}</td>
                               <td>{bookings.todate}</td>
+                              <td>{bookings.guestCount}</td>
                               <td>{bookings.status === 'booked' ? 'Confirmed' : bookings.status}</td>
                           </tr>
                       }))}

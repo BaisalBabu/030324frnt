@@ -63,6 +63,7 @@ function Room({ room, fromdate, todate ,numberOfPeople}) {
           <p>Maximum Occupancy: {room.maxcount}</p>
           <p>Conditioning: {room.conditioning}</p>
           <p>Type: {room.type}</p>
+          <p>Floor no: {room.count}</p>
         </b>
         <div style={{ float: 'right' }}>
         {(fromdate && todate) && (

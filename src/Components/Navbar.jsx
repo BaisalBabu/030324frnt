@@ -36,55 +36,61 @@ if (isLoginscreen) {
   return null;
 }
 
-  return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        
-        
+return (
+  <div>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <a className="navbar-brand" href={isPanelscreen ? '/panel' : (isBookingscreen || isProfilescreen || isHomeScreen) ? '/home' : '/'}>
-  Emirates
-</a>
-
-
-        <Button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon">
-            <FontAwesomeIcon icon={faBars} style={{ color: 'white' }} />
-          </span>
-        </Button>
-
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ml-auto mr-5">
-
-            {isAdminscreen  || isLoginscreen ? (
-               <>
-               
-               <li className="nav-item">
-                 <a className="nav-link" href="/signin">Login</a>
-               </li>
-             </>
-            ):user && (isHomeScreen || isBookingscreen || isProfilescreen )  ? (
-              <>
-              
-                <div className="dropdown">
-                  <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i className="fa-solid fa-user mr-2"></i>{user.name}
-                  </button>
-                  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a className="dropdown-item" href="/profile" >Profile</a>
-                    <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
-                  </div>
+        Emirates
+      </a>
+      <Button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon">
+          <FontAwesomeIcon icon={faBars} style={{ color: 'white' }} />
+        </span>
+      </Button>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav ml-auto mr-5">
+        {(isHomeScreen || isBookingscreen || isProfilescreen) && ( // Only render Home and About links on specified screens
+            <>
+              <div className="ml-2"> {/* Enclosing Home link within a div */}
+                <li className="nav-item">
+                  <a className="nav-link" href="/home">Home</a>
+                </li>
+              </div>
+              <div className="ml-2"> {/* Enclosing About link within a div */}
+                <li className="nav-item">
+                  <a className="nav-link" href="/about">About</a>
+                </li>
+              </div>
+            </>
+          )}
+          {isAdminscreen || isLoginscreen ? (
+            <>
+              <li className="nav-item">
+                <a className="nav-link" href="/signin">Login</a>
+              </li>
+            </>
+          ) : user && (isHomeScreen || isBookingscreen || isProfilescreen) ? (
+            <>
+              <div className="dropdown">
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i className="fa-solid fa-user mr-2"></i>{user.name}
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a className="dropdown-item" href="/profile">Profile</a>
+                  <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
                 </div>
-              </>
-            ) :  admin && (isPanelscreen) ? (<>
-              <>
+              </div>
+            </>
+          ) : admin && (isPanelscreen) ? (
+            <>
               <div className="dropdown">
                 <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i className="fa-solid fa-user mr-2"></i>{admin.name}
@@ -93,22 +99,22 @@ if (isLoginscreen) {
                   <a className="dropdown-item" href="#" onClick={logouts}>Logout</a>
                 </div>
               </div>
-              </>
-            </>) :(
-              <>
-                <li className="nav-item active">
-                  <a className="nav-link" href="/register">Register</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/login">Login</a>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </nav>
-    </div>
-  );
+            </>
+          ) : (
+            <>
+              <li className="nav-item active">
+                <a className="nav-link" href="/register">Register</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/login">Login</a>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </nav>
+  </div>
+);
 }
 
 export default Navbar;

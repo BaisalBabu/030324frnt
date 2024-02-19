@@ -66,15 +66,22 @@ const Homescreen = () => {
 
   function filterByType(selectedType) {
     setType(selectedType);
-
+  
     if (selectedType.toLowerCase() !== 'all') {
-      const tempRooms = duplicaterooms.filter((room) => room.type.toLowerCase() === selectedType.toLowerCase());
+      const tempRooms = duplicaterooms.filter((room) =>
+        room.type.toLowerCase() === selectedType.toLowerCase() &&
+        (conditioningFilter === 'all' || room.conditioning.toLowerCase() === conditioningFilter.toLowerCase())
+      );
       setRooms(tempRooms);
     } else {
       // Handle the case when 'all' is selected
-      setRooms(duplicaterooms);
+      const tempRooms = duplicaterooms.filter((room) =>
+        conditioningFilter === 'all' || room.conditioning.toLowerCase() === conditioningFilter.toLowerCase()
+      );
+      setRooms(tempRooms);
     }
   }
+  
 
   function filterByConditioning(selectedConditioning) {
     setConditioningFilter(selectedConditioning);

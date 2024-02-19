@@ -28,6 +28,11 @@ function Room({ room, fromdate, todate ,numberOfPeople}) {
   }, [room.imagefile1, room.imagefile2, room.imagefile3]);
   
 
+  if(!room.display)
+  {
+    return null;
+  }
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 

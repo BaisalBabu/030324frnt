@@ -5,7 +5,7 @@ import Loader from '../Components/Loader';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import 'antd/dist/reset.css';
-
+ 
 const { RangePicker } = DatePicker;
 
 const Homescreen = () => {
@@ -50,11 +50,21 @@ const Homescreen = () => {
   }, []);
 
   function filterByDate(dates) {
-    setFromdate(dates[0].format('DD-MM-YYYY'));
-    setTodate(dates[1].format('DD-MM-YYYY'));
+    setFromdate(dates[0].format("DD-MM-YYYY"));
+    setTodate(dates[1].format("DD-MM-YYYY"));
 
-    // Remove the filtering logic, and set the rooms directly
-    setRooms(duplicaterooms);
+    const temprooms = duplicaterooms.filter(room => {
+      const isRoomAvailable = room.currentbookings.every(booking => {
+        const startDateNotBetween = !moment(dates[0].format("DD-MM-YYYY")).isBetween(booking.fromdate, booking.todate, null, '[]');
+        const endDateNotBetween = !moment(dates[1].format("DD-MM-YYYY")).isBetween(booking.fromdate, booking.todate, null, '[]');
+
+        return startDateNotBetween && endDateNotBetween;
+      });
+
+      return isRoomAvailable;
+    });
+
+    setRooms(temprooms);
   }
 
   function filterBySearch() {

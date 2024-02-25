@@ -11,6 +11,8 @@ import Logscreen from "./Admin/Logscreen"
 import Profilescreen from './screens/Profilescreen';
 import Adminscreen from './screens/Adminscreen';
 import Landingscreen from './screens/Landingscreen';
+import Regscreen from './Admin/Regscreen';
+import BinStatus from './Components/lcd';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route path="/book/:roomid/:fromdate/:todate/:numberOfPeople" element={<Bookingscreen />} />
           <Route path="/register" element={<Registerscreen />} />
           <Route path="/login" element={<Loginscreen />} />
+          <Route path="/reg" element={<Regscreen/>}/>
+          <Route path="/lcd" element={<BinStatus/>}/>
           
           <Route path="/signin" element={<Logscreen />} />
           <Route path="/profile" element={<Profilescreen/> }/>

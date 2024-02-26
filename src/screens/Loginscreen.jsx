@@ -52,7 +52,7 @@ function Loginscreen() {
 
             {/* Add the hyperlink under the login button */}
             <p className="mt-2">
-              An Admin? <Link to="/signin">Click Here</Link>
+              Not a User? <Link to="/register">Click Here</Link>
             </p>
           </div>
         </div>

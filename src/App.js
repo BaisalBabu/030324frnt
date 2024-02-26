@@ -24,7 +24,7 @@ function App() {
           <Route path="/book/:roomid/:fromdate/:todate/:numberOfPeople" element={<Bookingscreen />} />
           <Route path="/register" element={<Registerscreen />} />
           <Route path="/login" element={<Loginscreen />} />
-          <Route path="/reg" element={<Regscreen/>}/>
+          {/* <Route path="/reg" element={<Regscreen/>}/> */}
           <Route path="/lcd" element={<BinStatus/>}/>
           
           <Route path="/signin" element={<Logscreen />} />

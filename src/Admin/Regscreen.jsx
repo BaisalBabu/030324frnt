@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useState } from 'react';
+import axios from 'axios';
 import Loader from '../Components/Loader';
 import Success from '../Components/Success';
 import Error from '../Components/Error';
@@ -10,7 +10,7 @@ function Regscreen() {
   const [password, setPassword] = useState('');
   const [cpassword, setCpassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   async function register() {
@@ -26,30 +26,36 @@ function Regscreen() {
         await axios.post('/api/admin/admin', user);
         setLoading(false);
         setSuccess(true);
-
+        setError(''); // Reset the error state when registration is successful
+  
         setName('');
         setEmail('');
         setPassword('');
         setCpassword('');
       } catch (error) {
         setLoading(false);
-        setError(true);
+        if (error.response && error.response.status === 400 && error.response.data.error === "Email already exists") {
+          setError("User with this email is already registered");
+        } else {
+          setError("An error occurred. Please try again later.");
+        }
         console.log(error);
       }
     } else {
       alert('Passwords do not Match');
     }
   }
+  
 
   return (
     <div>
       {loading && <Loader />}
-      {error && <Error />}
+      {error && <Error message={error} />} {/* Display error message */}
       
       <div className="row justify-content-center mt-5">
       
         <div className="col-md-5 mt-5 ">
-        {success && <Success message="Registered successfully" />}
+          {success && <Success message="Registered successfully" />}
           <div className="bs">
             <h2>Register</h2>
             <input

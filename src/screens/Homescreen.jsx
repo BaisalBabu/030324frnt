@@ -5,6 +5,7 @@ import Loader from '../Components/Loader';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import 'antd/dist/reset.css';
+import './homescreen.css'; 
  
 const { RangePicker } = DatePicker;
 
@@ -55,17 +56,20 @@ const Homescreen = () => {
 
     const temprooms = duplicaterooms.filter(room => {
       const isRoomAvailable = room.currentbookings.every(booking => {
-        const startDateNotBetween = !moment(dates[0].format("DD-MM-YYYY")).isBetween(booking.fromdate, booking.todate, null, '[]');
-        const endDateNotBetween = !moment(dates[1].format("DD-MM-YYYY")).isBetween(booking.fromdate, booking.todate, null, '[]');
-
-        return startDateNotBetween && endDateNotBetween;
+        const selectedStartDate = moment(dates[0].format("DD-MM-YYYY"));
+        const selectedEndDate = moment(dates[1].format("DD-MM-YYYY"));
+        const startDateNotBetween = !selectedStartDate.isBetween(booking.fromdate, booking.todate, null, '[]');
+        const endDateNotBetween = !selectedEndDate.isBetween(booking.fromdate, booking.todate, null, '[]');
+        const bookingNotWithinSelectedRange = moment(booking.fromdate).isSameOrAfter(selectedEndDate) || moment(booking.todate).isSameOrBefore(selectedStartDate);
+    
+        return startDateNotBetween && endDateNotBetween && bookingNotWithinSelectedRange;
       });
-
+    
       return isRoomAvailable;
     });
-
+    
     setRooms(temprooms);
-  }
+      }
 
   function filterBySearch() {
     const tempRooms = duplicaterooms.filter((room) =>

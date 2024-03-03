@@ -484,7 +484,7 @@ export function Bookings() {
                   <thead className='bs'>
                       <tr>
                           <th>BookigID</th>
-                          <th>UserID</th>
+                          <th>Username</th>
                           <th>Room</th>
                           <th>From</th>
                           <th>To</th>
@@ -496,7 +496,7 @@ export function Bookings() {
                       {bookings.length && (bookings.map(bookings => {
                           return <tr>
                               <td>{bookings._id}</td>
-                              <td>{bookings.userid}</td>
+                              <td>{bookings.username}</td>
                               <td>{bookings.room}</td>
                               <td>{bookings.fromdate}</td>
                               <td>{bookings.todate}</td>

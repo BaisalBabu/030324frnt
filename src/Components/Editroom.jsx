@@ -26,15 +26,18 @@ function EditRoom({ roomId }) {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/rooms/getroombyid', {
-          roomid: roomId,
+          roomids: [roomId],
         });
-        setRoomDetails(response.data);
+        setRoomDetails(response.data[0]); // Update to response.data[0] since you're fetching details of a single room
+        console.log('Room details response:', response.data[0]);
+
+        
 
         const typesResponse = await axios.get('/api/types/getroomtypes');
         setRoomTypes(typesResponse.data);
+        console.log('Room types response:', typesResponse.data);
       } catch (error) {
-        console.error(error);
-        // Handle error
+        console.error('Error fetching room details:', error);
       }
     };
 
@@ -45,6 +48,7 @@ function EditRoom({ roomId }) {
     try {
       setLoader(true);
 
+      // Assuming FormData is properly constructed
       const formData = new FormData();
       formData.append('name', roomDetails.name);
       formData.append('rentperday', roomDetails.rentperday);
@@ -53,7 +57,9 @@ function EditRoom({ roomId }) {
       formData.append('conditioning', roomDetails.conditioning);
       formData.append('type', roomDetails.type);
       formData.append('count', roomDetails.count);
+      
 
+      // Append image files if necessary
       if (roomDetails.imageFile1) {
         formData.append('imagefile1', roomDetails.imageFile1);
       }
@@ -65,6 +71,8 @@ function EditRoom({ roomId }) {
       if (roomDetails.imageFile3) {
         formData.append('imagefile3', roomDetails.imageFile3);
       }
+
+
 
       const response = await axios.put(`/api/rooms/updateroom/${roomId}`, formData, {
         headers: {
@@ -85,7 +93,6 @@ function EditRoom({ roomId }) {
     } catch (error) {
       console.error(error);
       setLoader(false);
-      // Handle error
     }
   };
 
@@ -97,11 +104,13 @@ function EditRoom({ roomId }) {
   };
 
   const handleInputChange = (e, key) => {
-    setRoomDetails({
-      ...roomDetails,
-      [key]: e.target.value,
-    });
+    const { value } = e.target;
+    setRoomDetails(prevRoomDetails => ({
+      ...prevRoomDetails,
+      [key]: value,
+    }));
   };
+  
 
   return (
     <div>
@@ -122,13 +131,13 @@ function EditRoom({ roomId }) {
 
       <label>Maximum Occupancy:</label>
       <Input
-        placeholder='Max Count'
+        placeholder='Maximum Occupancy'
         value={roomDetails.maxcount}
         onChange={(e) => handleInputChange(e, 'maxcount')}
       />
 
       <label>Description:</label>
-      <Input
+      <Input.TextArea
         placeholder='Description'
         value={roomDetails.description}
         onChange={(e) => handleInputChange(e, 'description')}
@@ -136,7 +145,6 @@ function EditRoom({ roomId }) {
 
       <label>Conditioning:</label>
       <Select
-        className='select-box'
         placeholder='Select Conditioning'
         value={roomDetails.conditioning}
         onChange={(value) => handleInputChange({ target: { value } }, 'conditioning')}
@@ -147,23 +155,20 @@ function EditRoom({ roomId }) {
 
       <label>Room Type:</label>
       <Select
-        className='select-box'
         placeholder='Select Room Type'
         value={roomDetails.type}
         onChange={(value) => handleInputChange({ target: { value } }, 'type')}
       >
-        {roomTypes
-              .filter((type) => type.display !== false)
-              .map((type) => (
-                <option key={type._id} value={type.type}>
-                  {type.type}
-                </option>
-              ))}
+        {roomTypes.map((type) => (
+          <Option key={type._id} value={type.type}>
+            {type.type}
+          </Option>
+        ))}
       </Select>
 
       <label>Available:</label>
       <Input
-        placeholder='Count'
+        placeholder='Available'
         value={roomDetails.count}
         onChange={(e) => handleInputChange(e, 'count')}
       />

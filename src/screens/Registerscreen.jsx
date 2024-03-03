@@ -26,25 +26,30 @@ function Registerscreen() {
         await axios.post('/api/users/register', user);
         setLoading(false);
         setSuccess(true);
-
+        setError(false); // Reset the error state when registration is successful
+  
         setName('');
         setEmail('');
         setPassword('');
         setCpassword('');
       } catch (error) {
         setLoading(false);
-        setError(true);
+        if (error.response && error.response.status === 400 && error.response.data.error === "Email already exists") {
+          setError("User with this email is already registered");
+        } else {
+          setError("An error occurred. Please try again later.");
+        }
         console.log(error);
       }
     } else {
       alert('Passwords do not Match');
     }
   }
-
+  
   return (
     <div>
       {loading && <Loader />}
-      {error && <Error />}
+      {error && <Error message={error} />} {/* Display error message */}
       
       <div className="row justify-content-center mt-5">
       

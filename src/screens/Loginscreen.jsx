@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate and Link
 import Loader from '../Components/Loader';
 import Error from '../Components/Error';
+// import './login.css'; // Import the CSS file for Login screen
 
 function Loginscreen() {
   const [email, setEmail] = useState('');
@@ -12,6 +13,13 @@ function Loginscreen() {
 
   // Get the navigate function
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add('bg-image'); // Apply background image class to body
+    return () => {
+      document.body.classList.remove('bg-image'); // Remove background image class when component unmounts
+    };
+  }, []);
 
   async function Login() {
     const user = {
@@ -27,7 +35,7 @@ function Loginscreen() {
       localStorage.setItem('currentuser', JSON.stringify(result));
 
       // Use React Router to navigate to the home page
-      navigate('/home');
+      navigate('/land');
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -62,3 +70,5 @@ function Loginscreen() {
 }
 
 export default Loginscreen;
+
+

@@ -4,11 +4,10 @@ import { useParams } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Error from '../Components/Error';
 import moment from 'moment';
-import StripeCheckout from 'react-stripe-checkout';
 import Swal from 'sweetalert2';
 
 const Bookingscreen = () => {
-  const { roomid, fromdate, todate,numberOfPeople } = useParams(); // Remove numberOfPeople as it's not provided in the URL
+  const { roomid, fromdate, todate, numberOfPeople } = useParams(); // Remove numberOfPeople as it's not provided in the URL
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [room, setRoom] = useState();
@@ -44,16 +43,17 @@ const Bookingscreen = () => {
     fetchData();
   }, [roomid]);
 
-  async function onToken(token) {
+  async function handleBooking() {
+    const currentuser = JSON.parse(localStorage.getItem('currentuser'));
     const bookingDetails = {
       room,
-      userid: JSON.parse(localStorage.getItem('currentuser'))._id,
+      userid: currentuser._id,
+      username: currentuser.name, // Include username in the booking details
       fromdate,
       todate,
       totalamount,
       totaldays: totldys,
-      token,
-      guestCount:numberOfPeople // Include guestCount in the booking details
+      guestCount: numberOfPeople // Include guestCount in the booking details
     };
 
     try {
@@ -107,14 +107,7 @@ const Bookingscreen = () => {
                 </b>
               </div>
               <div style={{ float: 'right' }}>
-                <StripeCheckout
-                  amount={totalamount * 100}
-                  token={onToken}
-                  currency='INR'
-                  stripeKey="pk_test_51OJAnCSFlsOEfvLRZOwvAcP39mGXnJYZDmmBCCKhoSXyXY3h13rGu36ywgXC6uV0K3BnaP6inwC9Tog9Awq9JbiT00gWNkzbXg"
-                >
-                  <button className='btn btn-primary'>Pay Now</button>
-                </StripeCheckout>
+                <button className='btn btn-primary' onClick={handleBooking}>Book Now</button>
               </div>
             </div>
           </div>

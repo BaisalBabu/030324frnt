@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Loader from '../Components/Loader';
+import { Input } from 'antd';
 
 function Addroom() {
   const [loader, setLoader] = useState(false);
@@ -113,7 +114,7 @@ function Addroom() {
         </div>
         <div>
           <label htmlFor='description'>Description:</label>
-          <input
+          <Input.TextArea
             type='text'
             className='form-control'
             
